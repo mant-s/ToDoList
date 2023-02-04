@@ -20,7 +20,7 @@ var myPassword = process.env.MY_PASSWORD;
 
 // Creating MongoDB with Mongoose
 mongoose.set("strictQuery", false);
-mongoose.connect("mongodb+srv://" + secrets.username + ":" + secrets.password + "@cluster0.vqmkiun.mongodb.net/todolistDB");
+mongoose.connect("mongodb+srv://" + myUsername + ":" + myPassword + "@cluster0.vqmkiun.mongodb.net/todolistDB");
 
 const itemsSchema = new mongoose.Schema({
     name: String,
