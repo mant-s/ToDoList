@@ -11,13 +11,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 // Importing secrets document
-const secrets = require(__dirname + "/.secrets.js").secrets;
+// const secrets = require(__dirname + "/.secrets.js").secrets;
+
+var myUsername = process.env.MY_USERNAME;
+var myPassword = process.env.MY_PASSWORD;
 
 // Begin app development
 
 // Creating MongoDB with Mongoose
-const defaultMongoDbPath = "mongodb://127.0.0.1:27017/";
-
 mongoose.set("strictQuery", false);
 mongoose.connect("mongodb+srv://" + secrets.username + ":" + secrets.password + "@cluster0.vqmkiun.mongodb.net/todolistDB");
 
