@@ -1,9 +1,14 @@
+require("dotenv").config();
+console.log(process.env)
 const express = require("express");
 // const date = require(__dirname + "/date.js");
 const mongoose = require("mongoose");
 const _ = require("lodash");
 
+
 const app = express();
+const PORT = process.env.PORT || 3000;
+mongoose.set("strictQuery", false);
 
 app.set("view engine", "ejs");
 
@@ -13,14 +18,20 @@ app.use(express.static("public"));
 // Importing secrets document
 // const secrets = require(__dirname + "/.secrets.js").secrets;
 
-var myUsername = process.env.MY_USERNAME;
-var myPassword = process.env.MY_PASSWORD;
-
-// Begin app development
-
 // Creating MongoDB with Mongoose
-mongoose.set("strictQuery", false);
-mongoose.connect("mongodb+srv://" + myUsername + ":" + myPassword + "@cluster0.vqmkiun.mongodb.net/todolistDB");
+var mongoURI = process.env.MONGO_URI;
+
+const connectDB = async() => {
+    try {
+        const conn = await mongoose.connect(mongoURI);
+        console.log(`MongoDB Connected: ${conn.connection.host}`);
+    } catch (error) {
+        console.log(error);
+        process.exit(1);
+    }
+}
+
+// mongoose.connect("mongodb+srv://" + myUsername + ":" + myPassword + "@cluster0.vqmkiun.mongodb.net/todolistDB");
 
 const itemsSchema = new mongoose.Schema({
     name: String,
@@ -169,6 +180,8 @@ app.get("/about", function (req, res) {
     res.render("about");
 });
 
-app.listen(process.env.PORT || 3000, function () {
-    console.log("Server started");
-});
+connectDB().then(() => {
+    app.listen(PORT, function(){
+        console.log(`Listening on port ${PORT}`);
+    })
+})
